@@ -1,0 +1,75 @@
+-- 1.	Last name starts with MY or contains SE
+SELECT * FROM sql_store.customers
+WHERE LAST_NAME regexp "^MY|SE";
+
+-- 2.	Last name contains b followed by R or U
+SELECT * FROM sql_store.customers
+WHERE LAST_NAME regexp "B[RU]";
+
+-- 3.	Get the orders that are not shipped
+SELECT * FROM sql_store.orders
+WHERE SHIPPED_DATE IS NULL;
+
+-- 4.	Start order times by order_id = 2 descending orders as per their total price
+SELECT order_id,product_id,quantity,unit_price,(quantity*unit_price) as total FROM sql_store.order_items
+WHERE order_id = 2
+ORDER BY total DESC;
+
+-- 5.	Get the top 3 loyal customers
+SELECT * FROM sql_store.customers
+ORDER BY POINTS DESC
+LIMIT 3;
+
+-- 6.	Join order_items table with products
+SELECT * FROM sql_store.order_items O
+JOIN products P
+ON  O.product_id = P.product_id;
+
+-- 7.	In sql_invoicing join 3 tables payment, client, payment_methods and show name of the client and payment method
+SELECT C.client_id, PM.name FROM sql_invoicing.clients C
+JOIN payments P
+ON C.client_id = P.client_id
+JOIN payment_methods PM
+ON P.payment_id = PM.payment_method_id;
+
+-- 8.	Join product with order_items table and show product_id, product name, and quantity
+SELECT O.product_id, P.name, O.quantity FROM sql_store.order_items O
+LEFT JOIN PRODUCTS P
+ON O.product_id = P.product_id;
+
+-- 9.	Get all rows with these columns – order_date, order_id, first_name, shipper, status
+SELECT o.order_date,first_name,shipper_id,status FROM sql_store.orders o
+left join customers c
+on o.customer_id = c.customer_id;
+
+-- 10.	Write a query from sql_invoicing to get date, client name, amount, payment method
+SELECT name as client_name,date,amount,payment_method FROM sql_invoicing.payments p
+join clients c
+on p.client_id = c.client_id;
+
+-- 11.	Get customer_id, first_name, points, type 0-1000 bronze, 2000-3000 silver and 3000> gold
+SELECT customer_id,first_name,points, "bronze" as type FROM sql_store.customers
+where points between 0 and 1000
+union
+SELECT customer_id,first_name,points, "silver" as type FROM sql_store.customers
+where points between 2000 and 3000
+union
+SELECT customer_id,first_name,points, "gold" as type FROM sql_store.customers
+where points>3000;
+
+
+-- 12. 	Last name ends with EY or ON
+SELECT * FROM sql_store.customers
+where last_name regexp "ey$|On$";
+
+-- 13.	Get the customers whose phone numbers ends with 9
+SELECT * FROM sql_store.customers
+where phone regexp "9$";
+
+-- 14.	From order_items tables, get the items for the order number 6 where the total price >30
+SELECT ORDER_ID,PRODUCT_ID,QUANTITY,UNIT_PRICE,(quantity*unit_price) as total FROM sql_store.order_items
+having ORDER_ID =6 AND total > 30;
+
+-- 15.	Get the order placed in 2019
+SELECT * FROM sql_store.orders
+where year(order_date)="2019"
