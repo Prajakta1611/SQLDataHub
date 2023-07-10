@@ -59,11 +59,11 @@ where points>3000;
 
 
 -- 12. 	Last name ends with EY or ON
-SELECT * FROM sql_store.customers
+SELECT last_name FROM sql_store.customers
 where last_name regexp "ey$|On$";
 
 -- 13.	Get the customers whose phone numbers ends with 9
-SELECT * FROM sql_store.customers
+SELECT phone FROM sql_store.customers
 where phone regexp "9$";
 
 -- 14.	From order_items tables, get the items for the order number 6 where the total price >30
